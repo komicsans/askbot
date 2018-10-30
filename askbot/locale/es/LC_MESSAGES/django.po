@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2018-04-27 16:02+0000\n"
+"PO-Revision-Date: 2018-10-29 13:16-0400\n"
 "Last-Translator: alquipas\n"
 "Language-Team: Spanish (http://www.transifex.com/askbot/askbot/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -4031,7 +4031,7 @@ msgstr "widget/"
 #: deps/django_authopenid/urls.py:24
 msgctxt "urls"
 msgid "signout/"
-msgstr "salir/"
+msgstr ""
 
 #: deps/django_authopenid/urls.py:31
 msgctxt "urls"
@@ -4046,7 +4046,7 @@ msgstr "registrar/"
 #: deps/django_authopenid/urls.py:46
 msgctxt "urls"
 msgid "signup/"
-msgstr "registrar/"
+msgstr "alta/"
 
 #: deps/django_authopenid/urls.py:55
 msgctxt "urls"
