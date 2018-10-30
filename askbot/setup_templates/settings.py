@@ -45,15 +45,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Madrid'
 
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
-LANGUAGE_CODE = 'en'
-LANGUAGES = (('en', 'English'),)
+LANGUAGE_CODE = 'es'
+LANGUAGES = (('es', 'Spanish'),)
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
