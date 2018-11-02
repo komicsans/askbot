@@ -40,8 +40,8 @@ DEFAULT_FROM_EMAIL = ''
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_SUBJECT_PREFIX = ''
-EMAIL_HOST=''
-EMAIL_PORT=''
+EMAIL_HOST='email'
+EMAIL_PORT='25'
 EMAIL_USE_TLS=False
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
@@ -160,12 +160,14 @@ INSTALLED_APPS = (
 # See http://docs.djangoproject.com/en/1.8/topics/cache/ for details.
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'askbot',
+        #'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        #'LOCATION': 'askbot',
         'TIMEOUT': 6000,
         # Chose a unique KEY_PREFIX to avoid clashes with other applications
         # using the same cache (e.g. a shared memcache instance).
-        'KEY_PREFIX': 'askbot',
+        #'KEY_PREFIX': 'askbot',
+        'BACKEND' : 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION' : 'unix:/tmp/memcached.sock',
     }
 }
 

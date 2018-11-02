@@ -35,3 +35,5 @@ sanction==0.3.1
 simplejson<=3.8.2
 six==1.10.0
 unidecode<=0.4.19
+mysql-python
+python-memcached
