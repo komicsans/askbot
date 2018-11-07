@@ -19,7 +19,7 @@ function wait_for_db(){
     done;
     sleep 5
 }
-function initialize(){
+function initialize_askbot(){
     wait_for_db 5;
     askbot-setup --dir-name=. --db-engine=${ASKBOT_DATABASE_ENGINE:-2} \
         --db-name=${ASKBOT_DATABASE_NAME:-db.sqlite} \
@@ -52,24 +52,60 @@ function initialize(){
 function run_memcached(){
     local pid=$(pidof memcached)
     if [ -z "$pid" ]; then
-        memcached -d -m ${MEMCACHED_MEMORY:-64} -s /tmp/memcached.sock -P /tmp/memcached.pid -u memcache -vv
+        memcached -d -m ${MEMCACHED_MEMORY:-64} -s /tmp/memcached.sock -P /tmp/memcached.pid -u www-data -vv &
     fi
+}
+function run_nginx(){
+    local pid=$(pidof nginx)
+    if [ -z "$pid" ]; then
+        pushd ${PROJECT_DIR}
+        nginx
+        popd
+    fi
+}
+function initialize_nginx(){
+    mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup
+    cp ${SOURCES_DIR}/nginx.config /etc/nginx/sites-available/default
+}
+function run_uwsgi(){
+    local pid=$(pidof uwsgi)
+    if [ -z "$pid" ]; then
+        pushd ${PROJECT_DIR}
+        uwsgi --ini ${PROJECT_DIR}/askbot-uwsgi.ini
+        popd
+    fi
+}
+function initialize_uwsgi(){
+    chown -R www-data:www-data ${PROJECT_DIR}/log 
+    find ${PROJECT_DIR}/askbot -type d -exec chgrp www-data {} \;
+    chmod 775 ${PROJECT_DIR}/log
+    find ${PROJECT_DIR}/askbot -type d -exec chmod 755 {} \;
+    cp ${SOURCES_DIR}/askbot-uwsgi.ini ${PROJECT_DIR}/
 }
 function run(){
     run_memcached
-    #python manage.py migrate --noinput
-    python manage.py runserver 0.0.0.0:${ASKBOT_EXPOSE_PORT:-8080}
+    #python manage.py runserver 0.0.0.0:${ASKBOT_EXPOSE_PORT:-8080}
+    run_nginx
+    run_uwsgi
+}
+function initialize(){
+    initialize_askbot
+    initialize_uwsgi
+    initialize_nginx
+}
+function start(){
+    pushd ${PROJECT_DIR:-/site}
+
+    if [ ! -d "${PROJECT_DIR}" ];then
+        echo "Wrong image"
+        exit 1
+    fi
+
+    if [ ! -f "${PROJECT_DIR}/manage.py" ]; then
+        initialize;
+    fi
+    run;
 }
 
-pushd ${PROJECT_DIR:-/site}
-
-if [ ! -d "${PROJECT_DIR}" ];then
-    echo "Wrong image"
-    exit 1
-fi
-
-if [ ! -f "${PROJECT_DIR}/manage.py" ]; then
-    initialize;
-fi
-run;
+start;
 

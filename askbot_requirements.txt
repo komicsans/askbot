@@ -37,3 +37,4 @@ six==1.10.0
 unidecode<=0.4.19
 mysql-python
 python-memcached
+uwsgi
