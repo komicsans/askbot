@@ -1,26 +1,25 @@
-source /src/init-vars.sh
 function wait_for_db(){
     local t=$1
     if [ -z "${t}" ]; then
         t=1
     fi
     while [[ $t -gt 0 ]] ;do
-        local i=5
+        local i=${WAIT_DB_TIMEOUT}
         while ! $(nc -vz ${ASKBOT_DATABASE_HOST} ${ASKBOT_DATABASE_PORT}); do
             if [[ $i -lt 0 ]]; then
                 echo "MAX TIMEOUT REACHED"
                 exit 1
             fi
             echo "WAITING FOR DB"
-            sleep 5
+            sleep ${WAIT_DB_SLEEP}
             let i--
         done;
         let t--
     done;
-    sleep 5
+    sleep ${WAIT_DB_SLEEP}
 }
 function initialize_askbot(){
-    wait_for_db 5;
+    wait_for_db $WAIT_DB_ITERATIONS
     askbot-setup --dir-name=. --db-engine=${ASKBOT_DATABASE_ENGINE:-2} \
         --db-name=${ASKBOT_DATABASE_NAME:-db.sqlite} \
         --db-user="${ASKBOT_DATABASE_USER}" \
@@ -28,7 +27,8 @@ function initialize_askbot(){
         --db-host="${ASKBOT_DATABASE_HOST}" \
         --db-port="${ASKBOT_DATABASE_PORT}"
 
-    run_memcached
+    #If run with cache, at this point must be alive
+    #run_memcached
 
     echo "Change value for ROOT_URLCONF (before)"
     grep ROOT_URLCONF settings.py
@@ -52,35 +52,35 @@ function initialize_askbot(){
 function run_memcached(){
     local pid=$(pidof memcached)
     if [ -z "$pid" ]; then
-        memcached -d -m ${MEMCACHED_MEMORY:-64} -s /tmp/memcached.sock -P /tmp/memcached.pid -u www-data -vv &
+        memcached -d -m ${MEMCACHED_MEMORY:-64} -s ${MEMCACHED_SOCK:-/tmp/memcached.sock} -P ${MEMCACHED_PID:-/tmp/memcached.pid} -u ${MEMCACHED_GROUP:-www-data} -vv &
     fi
 }
 function run_nginx(){
     local pid=$(pidof nginx)
     if [ -z "$pid" ]; then
         pushd ${PROJECT_DIR}
-        nginx
+        nginx ${NGINX_OPTIONS}
         popd
     fi
 }
 function initialize_nginx(){
     mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup
-    cp ${SOURCES_DIR}/nginx.config /etc/nginx/sites-available/default
+    cp ${SOURCES_DIR}/conf/${NGINX_CONFIG_FILENAME} /etc/nginx/sites-available/default
 }
 function run_uwsgi(){
     local pid=$(pidof uwsgi)
     if [ -z "$pid" ]; then
         pushd ${PROJECT_DIR}
-        uwsgi --ini ${PROJECT_DIR}/askbot-uwsgi.ini
+        uwsgi --ini ${PROJECT_DIR}/${UWSGI_INI_FILENAME}
         popd
     fi
 }
 function initialize_uwsgi(){
     chown -R www-data:www-data ${PROJECT_DIR}/log 
-    find ${PROJECT_DIR}/askbot -type d -exec chgrp www-data {} \;
+    find ${PROJECT_DIR}/askbot -type d -exec chgrp ${UWSGI_GROUP} {} \;
     chmod 775 ${PROJECT_DIR}/log
     find ${PROJECT_DIR}/askbot -type d -exec chmod 755 {} \;
-    cp ${SOURCES_DIR}/askbot-uwsgi.ini ${PROJECT_DIR}/
+    cp ${SOURCES_DIR}/conf/${UWSGI_INI_FILENAME} ${PROJECT_DIR}/
 }
 function run(){
     run_memcached
@@ -104,7 +104,7 @@ function start(){
     if [ ! -f "${PROJECT_DIR}/manage.py" ]; then
         initialize;
     fi
-    run;
+#   run;
 }
 
 start;

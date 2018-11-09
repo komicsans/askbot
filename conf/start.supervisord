@@ -1,0 +1,7 @@
+supervisorctl start memcached
+supervisorctl start initialization
+while [ "$(supervisorctl status initialization|awk '{print $2}')" != "EXITED" ]; do 
+    sleep 2
+done;
+supervisorctl start uwsgi
+supervisorctl start nginx

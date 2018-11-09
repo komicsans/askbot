@@ -38,3 +38,5 @@ unidecode<=0.4.19
 mysql-python
 python-memcached
 uwsgi
+envdir
+supervisor
