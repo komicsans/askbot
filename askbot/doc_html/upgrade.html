@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to upgrade Askbot &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Import other forums into Askbot" href="import-data.html" />
+    <link rel="prev" title="Deploying Askbot" href="deployment.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-upgrade-askbot">
+<h1>How to upgrade Askbot<a class="headerlink" href="#how-to-upgrade-askbot" title="Permalink to this headline">¶</a></h1>
+<p>NOTE: back up the database and customized files before upgrading.</p>
+<div class="section" id="django-version-support">
+<h2>1) Django Version support.<a class="headerlink" href="#django-version-support" title="Permalink to this headline">¶</a></h2>
+<p>Currently Askbot supports major versions of Django <cite>1.5</cite>, <cite>1.6</cite>, <cite>1.7</cite>
+and <cite>1.8</cite>, however - a corresponding version of Askbot must be selected for
+each version of the Django framework as shown below:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="59%" />
+<col width="41%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Version of the Django framework</th>
+<th class="head">Version of Askbot (*)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><cite>1.5.x</cite></td>
+<td><cite>0.7.x</cite> or <a href="#id1"><span class="problematic" id="id2">`</span></a>0.8.x`(**)</td>
+</tr>
+<tr class="row-odd"><td><cite>1.6.x</cite></td>
+<td><cite>0.8.x</cite> (**)</td>
+</tr>
+<tr class="row-even"><td><cite>1.7.x</cite></td>
+<td><cite>0.9.x</cite></td>
+</tr>
+<tr class="row-odd"><td><cite>1.8.x</cite></td>
+<td><cite>0.10.x</cite></td>
+</tr>
+</tbody>
+</table>
+<p>Note (*): select latest version of the corresponding release series,
+x means the latest minor release number.</p>
+<p>To automatically install the latest available version within the series,
+use the following pip commmand (here we want to install version 0.8.x):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>`pip install &#39;askbot&lt;0.9&#39;`.
+</pre></div>
+</div>
+<p>Note (**): releases of series <cite>0.8</cite> must be used only to migrate
+From Django <cite>1.5</cite> and below.</p>
+</div>
+<div class="section" id="upgrade-of-the-askbot-software">
+<h2>2) Upgrade of the Askbot software.<a class="headerlink" href="#upgrade-of-the-askbot-software" title="Permalink to this headline">¶</a></h2>
+<p>Before running the upgrade scripts - prepare fresh backup of the database,
+<cite>settings.py</cite> file and any other files that you&#8217;ve customized.</p>
+<p>If you are upgrading from one of the versions of <cite>0.7.x</cite> or earlier
+two steps will be necessary.</p>
+<ul class="simple">
+<li>Upgrade to <cite>0.8.x</cite></li>
+<li>Upgrade from <cite>0.8.x</cite> to <cite>0.9.x</cite> or <cite>0.10.x</cite> - depending
+on the version of Django you want to use</li>
+</ul>
+<p>Two steps are required because starting Django 1.7, the mechanism of database
+migrations changed. Version <cite>0.8.x</cite> is a stepping stone to the later versions,
+which prepares the database.</p>
+</div>
+</div>
+<div class="section" id="upgrade-to-version-0-8-x">
+<h1>2.1) Upgrade to version 0.8.x<a class="headerlink" href="#upgrade-to-version-0-8-x" title="Permalink to this headline">¶</a></h1>
+<p>Version <cite>0.8.x</cite> can be installed directly over the previous installation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">uninstall</span> <span class="n">askbot</span> <span class="o">&amp;&amp;</span> <span class="n">pip</span> <span class="n">install</span> <span class="s1">&#39;askbot&lt;0.9&#39;</span>
+</pre></div>
+</div>
+<p>Pip installs software from the Python Package Index
+(<a class="reference external" href="https://pypi.python.org/pypi">https://pypi.python.org/pypi</a>), alternatively, Askbot can be installed from
+the GitHub repository (<a class="reference external" href="https://github.com/ASKBOT/askbot-devel">https://github.com/ASKBOT/askbot-devel</a>) with the
+basic knowledge of <cite>git</cite> version control system.</p>
+<p>After that run <cite>python manage.py migrate</cite>. The script might ask you to
+upgrade some modules first, do that, then repeat the command.</p>
+</div>
+<div class="section" id="upgrade-to-0-9-x-or-0-10-x-into-a-new-python-environment">
+<h1>2.2) Upgrade to 0.9.x or 0.10.x into a new Python environment<a class="headerlink" href="#upgrade-to-0-9-x-or-0-10-x-into-a-new-python-environment" title="Permalink to this headline">¶</a></h1>
+<p>Upgrading to further options is easier to achieve
+(for an alternative, see section 2.3) by installation into
+a new environment:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">myproj</span>
+<span class="n">cd</span> <span class="n">myproj</span>
+<span class="n">virtualenv</span> <span class="n">env</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span>
+<span class="n">source</span> <span class="n">env</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="s1">&#39;askbot&lt;0.11&#39;</span> <span class="c1">#assuming you want 0.10.x</span>
+<span class="n">askbot</span><span class="o">-</span><span class="n">setup</span> <span class="c1">#answer questions - use the same database as before</span>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span> <span class="o">--</span><span class="n">fake</span><span class="o">-</span><span class="n">initial</span> <span class="o">--</span><span class="n">noinput</span>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span> <span class="o">--</span><span class="n">noinput</span>
+</pre></div>
+</div>
+<p>When upgrading to 0.9.x version, askbot version should be specified
+with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="s1">&#39;askbot&lt;0.10&#39;</span>
+</pre></div>
+</div>
+<p>And command should be without the <cite>&#8211;fake-initial</cite> parameter:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span> <span class="o">--</span><span class="n">noinput</span>
+</pre></div>
+</div>
+<p>Above instruction suggests using pip, hovewer it is also possible to
+clone the git repository, fetch and checkout the necessary version and run
+<cite>python setup.py develop</cite>.</p>
+<p>This page does yet cover the case where upgrade is done in-place, without
+creating of the new Python virtual environment. If you decide to upgrade
+in-place:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>* make changes in the `settings.py` file, replace `manage.py` and
+`urls.py` files. Templates for these files are available in
+`askbot/setup_templates` directory.
+might give more specific information about the necessary changes.
+* remove old `*.pyc` files: rm `find . -name &#39;*.pyc&#39;`
+* make necessary module upgrades
+</pre></div>
+</div>
+<p>Future version of this page might have more specific steps to take
+when upgrading in place.</p>
+</div>
+<div class="section" id="upgrade-to-0-9-x-over-the-existing-installation-of-0-8-x">
+<h1>2.3) Upgrade to 0.9.x over the existing installation of 0.8.x<a class="headerlink" href="#upgrade-to-0-9-x-over-the-existing-installation-of-0-8-x" title="Permalink to this headline">¶</a></h1>
+<p>This option is an alternative to one described in the section above.
+It is a bit more involved, but will help you to &#8220;grandfather&#8221; the
+<cite>settings.py</cite> and <cite>urls.py</cite> files that might have been customized.</p>
+<p>It is also possible to upgrade in the same manner to version 0.10.x,
+but with some differences that are described in section 2.4.</p>
+<p><cite>cd</cite> into the directory where your file is installed (the one with
+the <cite>settings.py</cite> file, it is also called the Django project directory).
+Then the following commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>rm `find . -name &#39;*.pyc&#39;` #delete all the left over .pyc files
+pip uninstall askbot django django-followit South --yes
+pip install &#39;askbot&lt;0.10&#39; #installs latest 0.9.x
+</pre></div>
+</div>
+<p>Edit the <cite>settings.py</cite> file:</p>
+<ul class="simple">
+<li>remove <cite>&#8216;south&#8217;</cite>, from <cite>INSTALLED_APPS</cite></li>
+<li>remove <cite>SOUTH_TESTS_MIGRATE</cite> from <cite>settings.py</cite></li>
+<li>replace entry <cite>&#8216;group_messaging&#8217;</cite> with <cite>&#8216;askbot.deps.group_messaging&#8217;</cite>
+in the <cite>INSTALLED_APPS</cite></li>
+<li>add line <cite>ATOMIC_REQUESTS=True</cite></li>
+</ul>
+<p>Replace file <cite>manage.py</cite> with one in askbot/setup_templates/manage.py.
+It might be a bit hard to find this file manually, the command below
+should help (copy/paste and run):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>cp `python -c &#39;import askbot, os; print os.path.join(os.path.dirname(askbot.__file__), &quot;setup_templates&quot;, &quot;manage.py&quot;)&#39;` .
+</pre></div>
+</div>
+<p>Migrate the database and collect the static files:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span> <span class="o">--</span><span class="n">noinput</span>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span> <span class="o">--</span><span class="n">noinput</span>
+</pre></div>
+</div>
+<p>Now the site is upgraded to version 0.9.x.</p>
+</div>
+<div class="section" id="upgrade-to-0-10-x-over-the-installation-0-8-x">
+<h1>2.3) Upgrade to 0.10.x over the installation 0.8.x<a class="headerlink" href="#upgrade-to-0-10-x-over-the-installation-0-8-x" title="Permalink to this headline">¶</a></h1>
+<p>Upgrade to version <cite>0.10.x</cite> follows the same steps and
+in the same order as above. This section describes only
+the differences, specific to version <cite>0.10.x</cite>.</p>
+<p>Install the latest version <cite>0.10.x</cite>, instead of <cite>0.9.x</cite>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="s1">&#39;askbot&lt;0.11&#39;</span> <span class="c1">#installs latest 0.10.x</span>
+</pre></div>
+</div>
+<p>When editing the <cite>settings.py</cite> file, in addition to changes made for <cite>0.9.x</cite>,
+do the following:</p>
+<ul>
+<li><p class="first">Remove whole entries <cite>TEMPLATE_LOADERS</cite> and <cite>TEMPLATE_CONTEXT_PROCESSORS</cite></p>
+</li>
+<li><p class="first">Remove sub-entry <cite>&#8216;django.middleware.transaction.TransactionMiddleware&#8217;</cite>
+from <cite>MIDDLEWARE_CLASSES</cite></p>
+</li>
+<li><p class="first">Add <cite>TEMPLATES</cite> entry with the following contents:</p>
+<dl class="docutils">
+<dt>TEMPLATES = (</dt>
+<dd><dl class="first docutils">
+<dt>{</dt>
+<dd><p class="first last">&#8216;BACKEND&#8217;: &#8216;askbot.skins.template_backends.AskbotSkinTemplates&#8217;,</p>
+</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div><p>&#8216;BACKEND&#8217;: &#8216;django.template.backends.django.DjangoTemplates&#8217;,
+&#8216;DIRS&#8217;: [],
+&#8216;APP_DIRS&#8217;: True,
+&#8216;OPTIONS&#8217;: {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;context_processors&#8217;: [</dt>
+<dd><p class="first last">&#8216;django.core.context_processors.request&#8217;,
+&#8216;django.contrib.auth.context_processors.auth&#8217;,</p>
+</dd>
+</dl>
+<p>]</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>)</p>
+</li>
+</ul>
+<p>Lastly, command <cite>migrate</cite> is run with an extra <cite>&#8211;fake-initial</cite> option:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span> <span class="o">--</span><span class="n">noinput</span> <span class="o">--</span><span class="n">fake</span><span class="o">-</span><span class="n">initial</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to upgrade Askbot</a><ul>
+<li><a class="reference internal" href="#django-version-support">1) Django Version support.</a></li>
+<li><a class="reference internal" href="#upgrade-of-the-askbot-software">2) Upgrade of the Askbot software.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#upgrade-to-version-0-8-x">2.1) Upgrade to version 0.8.x</a></li>
+<li><a class="reference internal" href="#upgrade-to-0-9-x-or-0-10-x-into-a-new-python-environment">2.2) Upgrade to 0.9.x or 0.10.x into a new Python environment</a></li>
+<li><a class="reference internal" href="#upgrade-to-0-9-x-over-the-existing-installation-of-0-8-x">2.3) Upgrade to 0.9.x over the existing installation of 0.8.x</a></li>
+<li><a class="reference internal" href="#upgrade-to-0-10-x-over-the-installation-0-8-x">2.3) Upgrade to 0.10.x over the installation 0.8.x</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="deployment.html"
+                        title="previous chapter">Deploying Askbot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="import-data.html"
+                        title="next chapter">Import other forums into Askbot</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

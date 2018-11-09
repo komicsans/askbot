@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Migrating data from MySQL to Postgresql &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Footnotes" href="footnotes.html" />
+    <link rel="prev" title="Configuring full text search in Askbot" href="text-search.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="migrating-data-from-mysql-to-postgresql">
+<span id="mysql-to-postgres"></span><h1>Migrating data from MySQL to Postgresql<a class="headerlink" href="#migrating-data-from-mysql-to-postgresql" title="Permalink to this headline">¶</a></h1>
+<p>In this document we explain how to migrate from MySQL to Postgresql with different approaches.</p>
+<p>Askbot is optimized for Postgresql as search functionality works better with this database engine.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As a general advice, to reduce the database size - run the <strong>cleanup</strong> management command before starting the migration.</p>
+</div>
+<div class="section" id="simple-migration-of-small-database">
+<h2>Simple Migration of small database<a class="headerlink" href="#simple-migration-of-small-database" title="Permalink to this headline">¶</a></h2>
+<p>If your database is small with few users and questions you can follow this steps:</p>
+<p>With MySQL as your database engine in your settings.py file run the following command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">dumpdata</span> <span class="o">&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>After that change your database engine to Postgresql in settings.py and do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">syncdb</span> <span class="o">--</span><span class="n">migrate</span> <span class="o">--</span><span class="n">noinput</span> <span class="c1">#create the database structure</span>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">loaddata</span>  <span class="n">data</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This won&#8217;t work with large datasets because django will load all your
+data into memory and you might run out of memory if the site data is too large.</p>
+<p class="last">This process can produce warnings that can be ignored.</p>
+</div>
+</div>
+<div class="section" id="data-migration-with-py-mysql2pgsql">
+<h2>Data migration with py-mysql2pgsql<a class="headerlink" href="#data-migration-with-py-mysql2pgsql" title="Permalink to this headline">¶</a></h2>
+<p>If the database is large this tool will come handy, to install it run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">py</span><span class="o">-</span><span class="n">mysql2pgsql</span>
+</pre></div>
+</div>
+<p>Create a configuration file called config.yml with the following contents:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mysql</span><span class="p">:</span>
+  <span class="n">hostname</span><span class="p">:</span> <span class="n">localhost</span>
+  <span class="n">port</span><span class="p">:</span> <span class="mi">3306</span>
+  <span class="n">username</span><span class="p">:</span> <span class="n">your_user</span>
+  <span class="n">password</span><span class="p">:</span> <span class="n">your_password</span>
+  <span class="n">database</span><span class="p">:</span> <span class="n">your_database</span>
+
+<span class="n">destination</span><span class="p">:</span>
+  <span class="n">file</span><span class="p">:</span>
+  <span class="n">postgres</span><span class="p">:</span>
+    <span class="n">hostname</span><span class="p">:</span> <span class="n">localhost</span>
+    <span class="n">port</span><span class="p">:</span> <span class="mi">5432</span>
+    <span class="n">username</span><span class="p">:</span> <span class="n">your_user</span>
+    <span class="n">password</span><span class="p">:</span> <span class="n">your_password</span>
+    <span class="n">database</span><span class="p">:</span> <span class="n">your_database</span>
+</pre></div>
+</div>
+<p>Then run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span><span class="o">-</span><span class="n">mysql2pgsql</span> <span class="o">-</span><span class="n">v</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+</div>
+<p>The script will start migrating the data and might take a while, depending on the database size.</p>
+<p>After the process is finished there are a couple of things left to do.</p>
+<div class="section" id="enable-postgresql-full-text-search">
+<h3>Enable Postgresql full text search<a class="headerlink" href="#enable-postgresql-full-text-search" title="Permalink to this headline">¶</a></h3>
+<p>Askbot relies on special postgresql features for better search, in this case the py-mysql2pgsql tool will not
+add these features, so it requires to be added manually.</p>
+<p>To fix it run the command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">init_postgresql_full_text_search</span>
+</pre></div>
+</div>
+<p>This may also take some time, depending on the database size.
+Test this by running a search query on the askbot site.</p>
+</div>
+<div class="section" id="fixing-data-types">
+<h3>Fixing data types<a class="headerlink" href="#fixing-data-types" title="Permalink to this headline">¶</a></h3>
+<p>The py-mysql2pgsql translates datatype a bit different than Django ORM do, to keep the same
+datatypes do the following:</p>
+<ol class="arabic">
+<li><p class="first">Create a new postgresql database and run sync and migrate commands the following way:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">syncdb</span> <span class="o">--</span><span class="n">migrate</span> <span class="o">--</span><span class="n">noinput</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">initial</span><span class="o">-</span><span class="n">data</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Dump the converted database data with binary format:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pg_dump</span> <span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">c</span> <span class="o">-</span><span class="n">a</span> <span class="n">database_name</span> <span class="o">&gt;</span> <span class="n">dump_name</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restore it into your current Django database:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pg_restore</span> <span class="o">-</span><span class="n">a</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">triggers</span> <span class="o">-</span><span class="n">d</span> <span class="n">django_database</span> <span class="n">dump_name</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/philipsoutham/py-mysql2pgsql">py-mysql2pgsql</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Migrating data from MySQL to Postgresql</a><ul>
+<li><a class="reference internal" href="#simple-migration-of-small-database">Simple Migration of small database</a></li>
+<li><a class="reference internal" href="#data-migration-with-py-mysql2pgsql">Data migration with py-mysql2pgsql</a><ul>
+<li><a class="reference internal" href="#enable-postgresql-full-text-search">Enable Postgresql full text search</a></li>
+<li><a class="reference internal" href="#fixing-data-types">Fixing data types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="text-search.html"
+                        title="previous chapter">Configuring full text search in Askbot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="footnotes.html"
+                        title="next chapter">Footnotes</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

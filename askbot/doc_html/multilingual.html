@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Setting up multilingual Askbot sites &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="setting-up-multilingual-askbot-sites">
+<h1>Setting up multilingual Askbot sites<a class="headerlink" href="#setting-up-multilingual-askbot-sites" title="Permalink to this headline">¶</a></h1>
+<p>Askbot can support multiple languages on a single site.
+Urls are modified by a language code prefix,
+e.g. url /questions/ becomes /de/questions/ for the German localization.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want to learn about configuration of individual languages
+please look <a class="reference internal" href="localization.html#localization"><span class="std std-ref">here</span></a></p>
+</div>
+<p>The setting in the <cite>settings.py</cite> file controlling language mode is
+<cite>ASKBOT_LANGUAGE_MODE</cite>.</p>
+<dl class="docutils">
+<dt>For the single-language mode this setting may be removed or set to::</dt>
+<dd>ASKBOT_LANGUAGE_MODE = &#8216;single-lang&#8217;</dd>
+<dt>For the &#8220;url language&#8221; mode (there are two multilingual modes)::</dt>
+<dd>ASKBOT_LANGUAGE_MODE = &#8216;url-lang&#8217;</dd>
+<dt>For the &#8220;user language&#8221; mode::</dt>
+<dd>ASKBOT_LANGUAGE_MODE = &#8216;user-lang&#8217;</dd>
+</dl>
+<p>The &#8220;url language&#8221; mode displays questions on the main page only
+for the language corresponding to the url prefix
+(e.g. /en/ for English or /de/ for German).</p>
+<p>The &#8220;user language&#8221; mode displays questions on the main page in
+the languages section of their user profile (for the logged in users).</p>
+<p>Language of the user interface in both multilingual modes corresponds
+to the language prefix of the url.</p>
+<p>For either of multilingual modes, specify the list of
+the enabled languages:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="k">import</span> <span class="n">ugettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
+<span class="n">LANGUAGES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s1">&#39;de&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;German&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;English&#39;</span><span class="p">))</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>More on the usage of this setting can be read in the
+<a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/settings/#languages">Django documentation</a>.</p>
+<p>Once the language mode is specified, Askbot startup checks, if enabled
+will guide through the configuration of the remaining settings.</p>
+<div class="section" id="upgrading-from-older-versions">
+<h2>Upgrading from older versions<a class="headerlink" href="#upgrading-from-older-versions" title="Permalink to this headline">¶</a></h2>
+<p>Older versions had setting <cite>ASKBOT_MULTILINGUAL</cite> used
+in the project-level <cite>urls.py</cite> file. When upgrading from such version,
+update the <cite>urls.py</cite> according to the template in
+<cite>askbot/setup_templates/urls.py</cite>.</p>
+</div>
+<div class="section" id="other-settings-required-for-the-multilingual-configuration">
+<h2>Other settings required for the multilingual configuration<a class="headerlink" href="#other-settings-required-for-the-multilingual-configuration" title="Permalink to this headline">¶</a></h2>
+<p>If the startup checks are enabled
+(setting <cite>ASKBOT_SELF_TEST</cite> does not equal <cite>False</cite>),
+Askbot will guide you through configuring of the remaining settings.</p>
+<p>This section will help users who disable the Askbot self-tests and
+when the mode is <cite>&#8216;url-lang&#8217;</cite> or <cite>&#8216;user-lang&#8217;</cite>.</p>
+<p>Activate the django&#8217;s locale middleware by adding to the
+<cite>MIDDLEWARE_CLASSES</cite> the following entry:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s1">&#39;django.middleware.locale.LocaleMiddleware&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Add the following to the <cite>settings.py</cite>::</dt>
+<dd>ASKBOT_TRANSLATE_URL = False</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Setting up multilingual Askbot sites</a><ul>
+<li><a class="reference internal" href="#upgrading-from-older-versions">Upgrading from older versions</a></li>
+<li><a class="reference internal" href="#other-settings-required-for-the-multilingual-configuration">Other settings required for the multilingual configuration</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Moderation in Askbot &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Askbot management commands" href="management-commands.html" />
+    <link rel="prev" title="Import other forums into Askbot" href="import-data.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="moderation-in-askbot">
+<h1>Moderation in Askbot<a class="headerlink" href="#moderation-in-askbot" title="Permalink to this headline">¶</a></h1>
+<p>Regular users and forum Moderators can participate
+in the content moderation. Any user with sufficient reputation
+(this reputation threshold can be changed in the settings panel)
+can flag offensive posts.</p>
+<p>When a post receives a certain number of flags (adjustable),
+the post is automatically hidden.</p>
+<p>In addition users can delete posts, given a minimum reputation
+threshold (also adjustable) is met.
+Moderators can delete any post at any time.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All the minimum reputation thresholds can be adjusted
+at the &#8220;settings&#8221; panel. Only site administrators have
+access to the settings editor.</p>
+</div>
+<p>Forum moderators can suspend and block users, by going to
+the &#8220;moderation&#8221; section in the user profile page.
+From the same page moderators can send an email to the user.</p>
+<p>Suspended users can only edit own posts, but cannot make new posts.
+Blocked users can only sign in and send feedback to
+the side administrators.</p>
+<p>Only site administrators can assign moderator status to any user.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="import-data.html"
+                        title="previous chapter">Import other forums into Askbot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="management-commands.html"
+                        title="next chapter">Askbot management commands</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

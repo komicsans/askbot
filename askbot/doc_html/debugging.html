@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Debugging Askbot (and other Django applications) &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="debugging-askbot-and-other-django-applications">
+<span id="debugging"></span><h1>Debugging Askbot (and other Django applications)<a class="headerlink" href="#debugging-askbot-and-other-django-applications" title="Permalink to this headline">¶</a></h1>
+<p>This document describes techniques that can be used to debug Askbot and other Django projects
+If you discover new debugging techniques, please add here.</p>
+<div class="section" id="use-development-server-for-debugging">
+<h2>Use development server for debugging<a class="headerlink" href="#use-development-server-for-debugging" title="Permalink to this headline">¶</a></h2>
+<p>Django comes with a handy development webserver that can be started with the command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
+</pre></div>
+</div>
+<p>With the combination of runserver,
+the <a class="reference internal" href="#pdb"><span class="std std-ref">python debugger</span></a>,
+and even inserted &#8220;print&#8221; statements directly in the code
+it is possible to &#8220;look into&#8221; the program as it runs.</p>
+</div>
+<div class="section" id="inspect-the-log-file">
+<h2>Inspect the log file<a class="headerlink" href="#inspect-the-log-file" title="Permalink to this headline">¶</a></h2>
+<p>By default askbot will log errors into file <cite>log/askbot.log</cite> within the
+project directory. See what&#8217;s inside that file.</p>
+<p>Note that in the production setups there are many log files - for the
+production webserver, database, etc.</p>
+</div>
+<div class="section" id="use-python-debugger">
+<h2>Use Python debugger<a class="headerlink" href="#use-python-debugger" title="Permalink to this headline">¶</a></h2>
+<p>In the problematic portion of the code, insert lines:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pdb</span>
+<span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then fire up the <a class="reference internal" href="#runserver"><span class="std std-ref">runserver</span></a> and step through the program.
+When you see prompt starting with <cite>(pdb)</cite>
+type <cite>help</cite> and see what options there are.</p>
+</div>
+<div class="section" id="use-logging-in-code">
+<h2>Use logging in code<a class="headerlink" href="#use-logging-in-code" title="Permalink to this headline">¶</a></h2>
+<p>Please remember that log files may contain plaintext passwords, etc.</p>
+<p>Please do not add print statements - at least do not commit them to git
+because in some environments printing to stdout causes errors</p>
+<p>Instead use python logging this way:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#somewere on top of file</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="c1">#anywhere below</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;this maybe works&#39;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;have big error!&#39;</span><span class="p">)</span>
+<span class="c1">#or even</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="c1">#this will add time, line number, function and file record</span>
+<span class="c1">#sometimes useful record for call tracing on its own</span>
+<span class="c1">#etc - take a look at http://docs.python.org/library/logging.html</span>
+</pre></div>
+</div>
+<p>in Askbot logging is currently set up in settings.py
+please update it if you need - in older revs logging strings have less info</p>
+<p>messages of interest can be grepped out of the log file by module/file/function name
+e.g. to take out all django_authopenid logs run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">grep</span> <span class="s1">&#39;askbot\/django_authopenid&#39;</span> <span class="n">log</span><span class="o">/</span><span class="n">django</span><span class="o">.</span><span class="n">askbot</span><span class="o">.</span><span class="n">log</span> <span class="o">|</span> <span class="n">sed</span> <span class="s1">&#39;s/^.*MSG: //&#39;</span>
+</pre></div>
+</div>
+<p>in the example above <cite>sed</cite> call truncates out a long prefix
+and makes output look more meaningful</p>
+</div>
+<div class="section" id="using-django-debug-toolbar">
+<h2>Using django debug toolbar<a class="headerlink" href="#using-django-debug-toolbar" title="Permalink to this headline">¶</a></h2>
+<p>Askbot works with django debug toolbar that displays a lot of useful diagnostics about
+your site.</p>
+<p>To enable the toolbar set parameter <cite>DEBUG = True</cite> in the <cite>settings.py</cite> file. Also you will
+need to add your IP address to the tuple <cite>INTERNAL_IPS</cite> in the same <cite>settings.py</cite> file.</p>
+<p>If your debugging site runs under apache server, check
+that debug toolbar media is loaded correctly through an <cite>alias</cite> configuration directive in
+the appropriate place of your apache configuration file.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Debugging Askbot (and other Django applications)</a><ul>
+<li><a class="reference internal" href="#use-development-server-for-debugging">Use development server for debugging</a></li>
+<li><a class="reference internal" href="#inspect-the-log-file">Inspect the log file</a></li>
+<li><a class="reference internal" href="#use-python-debugger">Use Python debugger</a></li>
+<li><a class="reference internal" href="#use-logging-in-code">Use logging in code</a></li>
+<li><a class="reference internal" href="#using-django-debug-toolbar">Using django debug toolbar</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

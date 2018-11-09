@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuring language support in Askbot &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Configuring full text search in Askbot" href="text-search.html" />
+    <link rel="prev" title="Setting up Askbot for use on the closed network (Intranet)" href="intranet-setup.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="configuring-language-support-in-askbot">
+<h1>Configuring language support in Askbot<a class="headerlink" href="#configuring-language-support-in-askbot" title="Permalink to this headline">¶</a></h1>
+<p>There are several things to consider when localizing askbot:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#default-lang"><span class="std std-ref">setting the site language</span></a></li>
+<li><a class="reference internal" href="#translate-urls"><span class="std std-ref">translation and display of the urls</span></a></li>
+<li><a class="reference internal" href="#strings"><span class="std std-ref">translation of the strings in the user interface</span></a></li>
+<li><a class="reference internal" href="multilingual.html#multilingual"><span class="std std-ref">enabling the multilingual setup</span></a></li>
+<li><a class="reference internal" href="text-search.html#text-search"><span class="std std-ref">configuring the language-specific text search</span></a></li>
+</ul>
+<div class="section" id="setting-the-site-language">
+<span id="default-lang"></span><h2>Setting the site language<a class="headerlink" href="#setting-the-site-language" title="Permalink to this headline">¶</a></h2>
+<p>Specify the language code with the value of <cite>LANGUAGE_CODE</cite> parameter
+in the <cite>settings.py</cite> file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LANGUAGE_CODE</span><span class="o">=</span><span class="s1">&#39;es&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the <a class="reference internal" href="multilingual.html#multilingual"><span class="std std-ref">multi-lingual configuration</span></a>
+this language will be the default and the complete list of
+language codes and their verbose names
+is specified with the <cite>LANGUAGES</cite> parameter.</p>
+</div>
+</div>
+<div class="section" id="translation-of-the-urls">
+<span id="translate-urls"></span><h2>Translation of the URLs<a class="headerlink" href="#translation-of-the-urls" title="Permalink to this headline">¶</a></h2>
+<p>There are also <cite>settings.py</cite> options to translate the urls:
+<cite>ASKBOT_TRANSLATE_URL</cite> and <cite>ALLOW_UNICODE_SLUGS</cite>.</p>
+<p>When the <cite>ASKBOT_TRANSLATE_URL</cite> is <cite>True</cite>, most urls will be translated,
+otherwise urls will be in English.
+When the <cite>ALLOW_UNICODE_SLUGS</cite> is <cite>True</cite> the question titles and user names
+will be presented as Unicode, e.g. with the Cyrillic, Chinese
+or Arabic characters, otherwise they will be transliterated into ASCII.</p>
+<p>If you are translating URLs (in the transifex you will probably
+find them as strings containing forward slashes) -
+take the following, in order to prevent broken links:</p>
+<ul class="simple">
+<li>translation of multiple urls cannot be the same
+(e.g. /question/ and /questions/ must have different translations)</li>
+<li>if the same url is present in more than one translation file
+those translation must be exactly the same</li>
+</ul>
+</div>
+<div class="section" id="translation-of-strings-in-askbot">
+<span id="strings"></span><h2>Translation of strings in Askbot<a class="headerlink" href="#translation-of-strings-in-askbot" title="Permalink to this headline">¶</a></h2>
+<p>Translation of Askbot strings is performed at the <a class="reference external" href="transifex">Transifex service</a>.
+Please <a class="reference external" href="transifex">register there</a> and work on the localization that interests you.
+We periodically update the source language strings on Transifex and pull
+the translations back into the project. Thanks!</p>
+<p>If you intend to translate urls - please <a class="reference internal" href="#translate-urls"><span class="std std-ref">look here</span></a>.</p>
+<p>Please <em>do not</em> translate via github (if you know what it means),
+as it&#8217;s better to have just one source of strings.</p>
+<p>The remaining part will will most likely interest developers,
+therefore here we tell what is specific to Askbot and
+refer the developer to the documentation of tools
+used in Askbot.</p>
+<p>Firstly - Askbot uses <a class="reference external" href="http://jinja.pocoo.org/docs/">Jinja2</a> templates,
+not the Django templates and an Jinja2 adapter module for Django, called
+<a class="reference external" href="https://github.com/coffin/coffin/">Coffin</a>. Please look at how translation
+tags are added to the templates processed by the <cite>coffin</cite> module.</p>
+<p>Secondly - instead of the django <cite>makemessages</cite> command - use <cite>jinja2_makemessages</cite>.</p>
+<p>Finally - to pull strings from the transifex use the <cite>tx</cite> program from
+<a class="reference external" href="https://pypi.python.org/pypi/transifex-client">transifex-client pypi package</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configuring language support in Askbot</a><ul>
+<li><a class="reference internal" href="#setting-the-site-language">Setting the site language</a></li>
+<li><a class="reference internal" href="#translation-of-the-urls">Translation of the URLs</a></li>
+<li><a class="reference internal" href="#translation-of-strings-in-askbot">Translation of strings in Askbot</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intranet-setup.html"
+                        title="previous chapter">Setting up Askbot for use on the closed network (Intranet)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="text-search.html"
+                        title="next chapter">Configuring full text search in Askbot</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

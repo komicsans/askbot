@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Askbot as reusable django application &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Skin system in Askbot" href="customizing-skin-in-askbot.html" />
+    <link rel="prev" title="Askbot API" href="api.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="askbot-as-reusable-django-application">
+<h1>Askbot as reusable django application<a class="headerlink" href="#askbot-as-reusable-django-application" title="Permalink to this headline">¶</a></h1>
+<p>Askbot can be used both as as dedicated site and as an application
+within a larger site. There are still issues to resolve to make askbot
+a truly reusable app, but some are already solved.</p>
+<p>This page is a guide for using askbot as an independent app and it is
+somewhat technical.</p>
+<div class="section" id="adding-askbot-to-a-pre-existing-site">
+<h2>Adding askbot to a pre-existing site<a class="headerlink" href="#adding-askbot-to-a-pre-existing-site" title="Permalink to this headline">¶</a></h2>
+<p>If you already have a django site with users, after adding askbot
+to your project, run a management command just once:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">add_missing_subscriptions</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This only applies to users registered before the installation of Askbot.
+Newer users will have default subscription records
+created automatically, by the Django&#8217;s <code class="docutils literal"><span class="pre">post_save</span></code> signal.</p>
+<p class="last">The email subscription settings are also created automatically
+when certain pages are visited and when <code class="docutils literal"><span class="pre">send_email_alerts</span></code>
+command is run, so it is not mandatory to run
+<code class="docutils literal"><span class="pre">add_missing_subscriptions</span></code>.</p>
+</div>
+</div>
+<div class="section" id="using-alternative-login-system">
+<h2>Using alternative login system<a class="headerlink" href="#using-alternative-login-system" title="Permalink to this headline">¶</a></h2>
+<p>Askbot has a bundled application for user login and registration,
+but it can be replaced with any other.
+Just remove <code class="docutils literal"><span class="pre">'askbot.deps.django_authopenid'</span></code>
+from the <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code>,
+remove <code class="docutils literal"><span class="pre">'askbot.deps.django_authopenid.backends.AuthBackend'</span></code>
+from the <code class="docutils literal"><span class="pre">AUTHENTICATION_BACKENDS</span></code>,
+install another registration app
+and modify <code class="docutils literal"><span class="pre">LOGIN_URL</span></code> and <code class="docutils literal"><span class="pre">LOGOUT_URL</span></code> accordingly.</p>
+<p>If you are adding Askbot to a django site that already has
+registered users, please see <a class="reference internal" href="#adding-askbot-to-pre-existing-site"><span class="std std-ref">this section</span></a>.</p>
+<p>There are two caveats.</p>
+<p>Firstly, if you are using some other login/registration app,
+please disable feature
+&#8220;settings&#8221;-&gt;&#8221;data entry and display&#8221;-&gt;&#8221;allow posting before logging in&#8221;.</p>
+<p>This may be fixed in the future by adding a snippet of code to run
+right after the user logs in - please ask at askbot forum if you are
+interested.</p>
+<p>Secondly, disable setting &#8220;settings&#8221;-&gt;&#8221;user settings&#8221;-&gt;&#8221;allow add and remove login methods&#8221;.
+This one is specific to the builtin login application which allows more than one login
+method per user account.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Askbot as reusable django application</a><ul>
+<li><a class="reference internal" href="#adding-askbot-to-a-pre-existing-site">Adding askbot to a pre-existing site</a></li>
+<li><a class="reference internal" href="#using-alternative-login-system">Using alternative login system</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="previous chapter">Askbot API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="customizing-skin-in-askbot.html"
+                        title="next chapter">Skin system in Askbot</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

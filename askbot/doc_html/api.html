@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Askbot API &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Askbot as reusable django application" href="askbot-as-reusable-django-application.html" />
+    <link rel="prev" title="Optional modules" href="optional-modules.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="askbot-api">
+<h1>Askbot API<a class="headerlink" href="#askbot-api" title="Permalink to this headline">¶</a></h1>
+<p>Askbot has API to access forum data in read-only mode.
+Current version of API is 1.</p>
+<p>All data is returned in json format.</p>
+<p>All urls start with <cite>/api/v1/</cite> and the following endpoints are available:</p>
+<div class="section" id="api-v1-info">
+<h2><cite>/api/v1/info/</cite><a class="headerlink" href="#api-v1-info" title="Permalink to this headline">¶</a></h2>
+<p>Returns basic parameters of the site.</p>
+</div>
+<div class="section" id="api-v1-users">
+<h2><cite>/api/v1/users/</cite><a class="headerlink" href="#api-v1-users" title="Permalink to this headline">¶</a></h2>
+<p>Returns, count, number of pages and basic data for each user.</p>
+<p>Optional parameters::
+* page (&lt;int&gt; page number)
+* sort (reputation|oldest|recent|name, default value - &#8220;reputation&#8221;)</p>
+</div>
+<div class="section" id="api-v1-users-user-id">
+<h2><cite>/api/v1/users/&lt;user_id&gt;/</cite><a class="headerlink" href="#api-v1-users-user-id" title="Permalink to this headline">¶</a></h2>
+<p>Returns basic information about a given user.</p>
+</div>
+<div class="section" id="api-v1-questions">
+<h2><cite>/api/v1/questions/</cite><a class="headerlink" href="#api-v1-questions" title="Permalink to this headline">¶</a></h2>
+<p>Returns information about all questions.</p>
+<p>Optional parameters:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">author</span> <span class="p">(</span><span class="o">&lt;</span><span class="nb">int</span><span class="o">&gt;</span> <span class="n">user</span> <span class="nb">id</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">scope</span> <span class="p">(</span><span class="nb">all</span><span class="o">|</span><span class="n">unanswered</span><span class="p">),</span> <span class="n">default</span> <span class="s2">&quot;all&quot;</span>
+<span class="o">*</span> <span class="n">sort</span> <span class="p">(</span><span class="n">age</span><span class="o">|</span><span class="n">activity</span><span class="o">|</span><span class="n">answers</span><span class="o">|</span><span class="n">votes</span><span class="o">|</span><span class="n">relevance</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">asc</span><span class="o">|</span><span class="n">desc</span><span class="p">)</span> <span class="n">default</span> <span class="o">-</span> <span class="n">activity</span><span class="o">-</span><span class="n">desc</span>
+<span class="o">*</span> <span class="n">tags</span> <span class="o">-</span> <span class="n">comma</span><span class="o">-</span><span class="n">separated</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">tags</span><span class="p">,</span> <span class="n">without</span> <span class="n">spaces</span>
+<span class="o">*</span> <span class="n">query</span> <span class="o">-</span> <span class="n">text</span> <span class="n">search</span> <span class="n">query</span><span class="p">,</span> <span class="n">url</span> <span class="n">escaped</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">&#8220;relevance&#8221; sorting is available only for postgresql database backend</p>
+</div>
+</div>
+<div class="section" id="api-v1-questions-question-id">
+<h2><cite>/api/v1/questions/&lt;question_id&gt;/</cite><a class="headerlink" href="#api-v1-questions-question-id" title="Permalink to this headline">¶</a></h2>
+<p>Returns data about individual question</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Askbot API</a><ul>
+<li><a class="reference internal" href="#api-v1-info"><cite>/api/v1/info/</cite></a></li>
+<li><a class="reference internal" href="#api-v1-users"><cite>/api/v1/users/</cite></a></li>
+<li><a class="reference internal" href="#api-v1-users-user-id"><cite>/api/v1/users/&lt;user_id&gt;/</cite></a></li>
+<li><a class="reference internal" href="#api-v1-questions"><cite>/api/v1/questions/</cite></a></li>
+<li><a class="reference internal" href="#api-v1-questions-question-id"><cite>/api/v1/questions/&lt;question_id&gt;/</cite></a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="optional-modules.html"
+                        title="previous chapter">Optional modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="askbot-as-reusable-django-application.html"
+                        title="next chapter">Askbot as reusable django application</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

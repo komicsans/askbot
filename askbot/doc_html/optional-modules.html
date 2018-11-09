@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Optional modules &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Askbot API" href="api.html" />
+    <link rel="prev" title="Sending email to askbot" href="sending-email-to-askbot.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="optional-modules">
+<h1>Optional modules<a class="headerlink" href="#optional-modules" title="Permalink to this headline">¶</a></h1>
+<p>Askbot supports a number of optional modules, enabling certain features, not available
+in askbot by default.</p>
+<div class="section" id="haystack-search">
+<span id="haystack"></span><h2>Haystack search<a class="headerlink" href="#haystack-search" title="Permalink to this headline">¶</a></h2>
+<p>Askbot supports <a class="reference external" href="http://haystacksearch.org/">Haystack</a>, a modular search framework that supports popular search engine backends as
+Solr, Elasticsearch, Whoosh and Xapian.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Haystack support in Askbot is a new feature,
+please give us your feedback at <code class="docutils literal"><span class="pre">support&#64;askbot.com</span></code>
+regarding the possible improvements.</p>
+</div>
+<p>To enable:</p>
+<ul class="simple">
+<li>add &#8216;haystack&#8217; to INSTALLED_APPS</li>
+<li>add ENABLE_HAYSTACK_SEARCH = True in settings.py</li>
+<li>Configure your search backend according to your setup following <a class="reference external" href="http://django-haystack.readthedocs.org/en/latest/tutorial.html#modify-your-settings-py">this guide</a></li>
+</ul>
+<div class="section" id="solr-and-multilingual-support">
+<h3>Solr and  Multilingual Support<a class="headerlink" href="#solr-and-multilingual-support" title="Permalink to this headline">¶</a></h3>
+<p>There is more documentation about solr and multilingual support  please visit <a class="reference internal" href="solr.html#solr"><span class="std std-ref">this link</span></a></p>
+</div>
+</div>
+<div class="section" id="ldap-authentication">
+<span id="ldap"></span><h2>LDAP authentication<a class="headerlink" href="#ldap-authentication" title="Permalink to this headline">¶</a></h2>
+<p>To enable authentication via LDAP
+(Lightweight Directory Access Protocol, see more info elsewhere)
+, first <span class="xref std std-ref">install</span>
+<code class="docutils literal"><span class="pre">python-ldap</span></code> package:</p>
+<blockquote>
+<div>pip install python-ldap</div></blockquote>
+<p>After that, add configuration parameters in <a class="reference internal" href="live-settings.html#live-settings"><span class="std std-ref">live settings</span></a>,
+section &#8220;LDAP settings&#8221;
+(url <code class="docutils literal"><span class="pre">/settings/LDAP_SETTINGS</span></code>, relative to the forum base url)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">While it is possible to configure LDAP via web interface,
+it is actually more safe to add them in your <code class="docutils literal"><span class="pre">settings.py</span></code> file in the
+<a class="reference internal" href="live-settings.html#live-settings-options"><span class="std std-ref">LIVESETTINGS_OPTIONS</span></a> dictionary.
+Consider that a breach in security of your forum might open
+malicious access into your LDAP directory.</p>
+</div>
+<p>The parameters are (note that some have pre-set defaults that might work for you):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="ow">in</span> <span class="n">Login</span> <span class="n">Provider</span> <span class="n">Settings</span> <span class="n">select</span> <span class="s2">&quot;enable local login&quot;</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li>this makes login/password form available</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>enable/disable LDAP for password login -
+must check that, to connect the login/password form to LDAP flow</li>
+<li>create accounts automatically or not (<code class="docutils literal"><span class="pre">LDAP_AUTOCREATE_USERS</span></code>)</li>
+<li>protocol version (<code class="docutils literal"><span class="pre">LDAP_PROTOCOL_VERSION</span></code>) (version 2 is insecure and deprecated)</li>
+<li>ldap url (<code class="docutils literal"><span class="pre">LDAP_URL</span></code>)</li>
+<li>base distinguished name, &#8216;dn&#8217; in LDAP parlance (<code class="docutils literal"><span class="pre">LDAP_BASEDN</span></code>)</li>
+<li>user id field name (<code class="docutils literal"><span class="pre">LDAP_USERID_FIELD</span></code>)</li>
+<li>email field name (<code class="docutils literal"><span class="pre">LDAP_EMAIL_FIELD</span></code>)</li>
+<li>user name filter template (<code class="docutils literal"><span class="pre">LDAP_USERNAME_FILTER_TEMPLATE</span></code>)
+must have two string placeholders.</li>
+<li>given (first) name field (<code class="docutils literal"><span class="pre">LDAP_GIVEN_NAME_FIELD</span></code>)</li>
+<li>surname (last name) field (<code class="docutils literal"><span class="pre">LDAP_SURNAME_FIELD</span></code>)</li>
+<li>common name field (<code class="docutils literal"><span class="pre">LDAP_COMMON_NAME_FIELD</span></code>)
+either given and surname should be used or common name.
+All three are not necessary - either first two or common.
+These fields are used to extract users first and last names.</li>
+<li>Format of common name (<code class="docutils literal"><span class="pre">LDAP_COMMON_NAME_FIELD_FORMAT</span></code>)
+values can be only &#8216;first,last&#8217; or &#8216;last,first&#8217; - used to
+extract last and first names from common name</li>
+</ul>
+<p>There are three more optional parameters that must go to the <code class="docutils literal"><span class="pre">settings.py</span></code> file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>* ``LDAP_LOGIN_DN``
+* ``LDAP_PASSWORD``
+* ``LDAP_EXTRA_OPTIONS``, a list of two-item tuples - of names and values of
+</pre></div>
+</div>
+<blockquote>
+<div>the options. Option names must be upper case strings all starting with <code class="docutils literal"><span class="pre">OPT_</span></code>
+as described in the <a class="reference external" href="http://www.python-ldap.org/doc/html/ldap.html#options">python ldap library documentation</a>. An often used option is (<cite>OPT_REFERRALS</cite>, 0).</div></blockquote>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">LDAP_AUTHENTICATE_FUNCTION</span></code> - dotted python path to optional function that
+can override the default <cite>ldap_authenticate</cite> function. This function allows to
+completely customize the LDAP login procedure.
+To see what is expected of this function (input parameters and the return value) -
+look at the end of the doc string at
+<cite>askbot.deps.django_authopenid.ldap_auth.ldap_authenticate_default</cite>.
+One use case for the custom function is determining to which group
+a user might belong or check any additional access rules that might be
+stored in your LDAP directory. Another use case - is the case when
+the default procedure just does not work for you.</li>
+<li><code class="docutils literal"><span class="pre">LDAP_AUTHENICATE_FAILURE_FUNCTION</span></code> - python dotted path to an additional function
+that may be called after a unsuccessful authentication.
+This function can be used to set custom error messages to the login form.
+The function should take two parameters (in the following order): user_info, login_form.
+user_info - is the same dictionary
+that is returned by the <cite>ldap_authenticate</cite> function.</li>
+<li><code class="docutils literal"><span class="pre">LDAP_CREATE_USER_FUNCTION</span></code> - python dotted path to function that will create
+the ldap user, should actually return a user association object, like
+<code class="docutils literal"><span class="pre">askbot.deps.django_authopenid.ldap_auth.ldap_create_user_default</span></code>.
+Function takes return value of the ldap authenticate function as a sole parameter.</li>
+</ul>
+<p>Use these when you have the &#8220;directory master passsword&#8221; -
+for a specific user who can access the rest of the directory,
+these were not added to the live settings due to security concerns.</p>
+<p><code class="docutils literal"><span class="pre">LDAP_USER</span></code> and <code class="docutils literal"><span class="pre">LDAP_PASSWORD</span></code> will be used only if both are provided!</p>
+<p>Since LDAP authentication requires so many parameters,
+you might need to <a class="reference internal" href="debugging.html#debugging"><span class="std std-ref">debug</span></a> the settings.
+The function to look at is <cite>askbot.deps.django_authopenid.backends.ldap_authenticate</cite>.
+If you have problems with LDAP please contact us at <a class="reference external" href="mailto:support&#37;&#52;&#48;askbot&#46;com">support<span>&#64;</span>askbot<span>&#46;</span>com</a>.</p>
+<p>The easiest way to debug - insert <code class="docutils literal"><span class="pre">import</span> <span class="pre">pdb;</span> <span class="pre">pdb.set_trace()</span></code> line into function
+<cite>askbot.deps.django_authopenid.backends.ldap_authenticate</cite>,
+start the <code class="docutils literal"><span class="pre">runserver</span></code> and step through.</p>
+</div>
+<div class="section" id="custom-section-in-the-user-profile">
+<span id="custom-profile"></span><h2>Custom section in the user profile<a class="headerlink" href="#custom-section-in-the-user-profile" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you might want to add a completely custom section
+to the user profile, available via an additional tab.</p>
+<p>This is possible by editing the <code class="docutils literal"><span class="pre">settings.py</span></code> file,
+which means that to use this feature you must have sufficient
+access to the webserver file system.</p>
+<p>Add a following setting to your <code class="docutils literal"><span class="pre">settings.py</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ASKBOT_CUSTOM_USER_PROFILE_TAB</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;some name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SLUG&#39;</span><span class="p">:</span> <span class="s1">&#39;some-name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CONTEXT_GENERATOR&#39;</span><span class="p">:</span> <span class="s1">&#39;myapp.views.somefunc&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The value of <code class="docutils literal"><span class="pre">ASKBOT_CUSTOM_USER_PROFILE_TAB['CONTEXT_GENERATOR']</span></code>
+should be a path to the function that returns context for the tab.</p>
+<p>Here is a simple example of the content generator
+implemented as part of the fictional application called <code class="docutils literal"><span class="pre">myapp</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myapp.models</span> <span class="k">import</span> <span class="n">Thing</span><span class="c1">#definition not shown here</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="k">import</span> <span class="n">Context</span>
+
+<span class="k">def</span> <span class="nf">somefunc</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">profile_owner</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;loads things for the ``profile_owner``</span>
+<span class="sd">    and returns output rendered as html string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">things</span> <span class="o">=</span> <span class="n">Thing</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span> <span class="o">=</span> <span class="n">profile_owner</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;things&#39;</span><span class="p">:</span> <span class="n">things</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The function is very similar to the regular
+Django view, but returns a string instead of the <code class="docutils literal"><span class="pre">HttpResponse</span></code>
+instance.</p>
+<p>Create your custome theme, copy there a template
+<cite>askbot/templates/user_profile/custom_tab.html</cite>.
+Then modify the template to display the context generated by
+the function shown above.</p>
+<p>Also, the method must accept one additional argument -
+an instance of the <code class="docutils literal"><span class="pre">django.contrib.auth.models.User</span></code> object.</p>
+</div>
+<div class="section" id="wordpress-authentication">
+<span id="wordpress-auth"></span><h2>Wordpress authentication<a class="headerlink" href="#wordpress-authentication" title="Permalink to this headline">¶</a></h2>
+<p>To enable authentication for self hosted wordpress sites(wordpress.com blogs will work with openid login). To enable it follow the following steps:</p>
+<ul class="simple">
+<li>Check if you have the package <a class="reference external" href="http://pypi.python.org/pypi/python-wordpress-xmlrpc/1.4">&#8220;python_wordpress_xmlrpc</a> from pypi.</li>
+<li>Go to your wordpress blog admin panel and serch for: Settings-&gt;Writing-&gt;Remote Publishing then check the box for XML-RPC.</li>
+<li>Go back to your askbot site settings and click on <em>Login Provider Settings</em> and then activate the option <em>Activate to allow login with self-hosted wordpress site</em>,</li>
+<li>Input your blog url to the xmlrpc.php file it will look something like this <a class="reference external" href="http://yoursite.com/xmlrpc.php">http://yoursite.com/xmlrpc.php</a></li>
+<li>Upload an icon for display in the login area.</li>
+</ul>
+<p>After doing this steps you should be able to login with your self hosted wordpress site user/password combination.</p>
+</div>
+<div class="section" id="celery-for-background-jobs">
+<span id="celery"></span><h2>Celery for background jobs<a class="headerlink" href="#celery-for-background-jobs" title="Permalink to this headline">¶</a></h2>
+<p>Askbot supports <a class="reference external" href="http://celeryproject.org/">celery</a> distributed task queue for some task, to enable it follow the following steps:</p>
+<ul class="simple">
+<li>Install the following packages: <a class="reference external" href="http://pypi.python.org/pypi/django-celery">celery</a>, <a class="reference external" href="http://pypi.python.org/pypi/django-celery">django-celery</a>,  <a class="reference external" href="http://pypi.python.org/pypi/django-kombu">django-kombu</a></li>
+<li>Set <strong>CELERY_ALWAYS_EAGER</strong> setting value to <strong>False</strong></li>
+<li>Run the celery daemon: for this you can use generic init scripts or supervisor, <a class="reference external" href="http://docs.celeryproject.org/en/latest/cookbook/daemonizing.html">celery documentation have more information</a></li>
+</ul>
+<p>For <a class="reference external" href="http://supervisord.org/">supervisor</a>: add this sample config file named askbot.conf into /etc/supervisor/conf.d/ directory:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">program</span><span class="p">:</span><span class="n">askbot_celery</span><span class="p">]</span>
+<span class="n">command</span><span class="o">=</span><span class="n">celeryd</span> <span class="o">--</span><span class="n">loglevel</span><span class="o">=</span><span class="n">INFO</span>
+
+<span class="n">environment</span><span class="o">=</span><span class="n">PYTHONPATH</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">project</span>
+<span class="n">directory</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">project</span>
+
+<span class="n">user</span><span class="o">=</span><span class="n">nobody</span>
+<span class="n">numprocs</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">stdout_logfile</span><span class="o">=/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">askbot_celery</span><span class="o">.</span><span class="n">log</span>
+<span class="n">stderr_logfile</span><span class="o">=/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">askbot_celery</span><span class="o">.</span><span class="n">err</span>
+<span class="n">autostart</span><span class="o">=</span><span class="n">true</span>
+<span class="n">autorestart</span><span class="o">=</span><span class="n">true</span>
+<span class="n">startsecs</span><span class="o">=</span><span class="mi">10</span>
+</pre></div>
+</div>
+<p>Then run <strong>supervisorctl update</strong> and it will be started. For more information about job handling with supervisor please visit <a class="reference external" href="http://supervisord.org/">this link</a>.</p>
+</div>
+<div class="section" id="s3-integration">
+<h2>S3 Integration<a class="headerlink" href="#s3-integration" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please note that this is a &#8220;recipe&#8221; solution and there might be a better way
+to achieve the same. Please have a look at available django packages
+for integration with the S3 service.</p>
+</div>
+<p>The media files are stored locally by default. If you&#8217;re hosting askbot on AWS you might want to take advantage of S3 buckets instead. The usage of S3 buckets becomes particularly important when you deploy Askbot on an AutoScaling group; in this configuration, you might notice some avatars go missing. This problem occurs since ASG might be firing off a new instance and it does not have access to the older avatar files that were stored in the old instance. Saving the media files on S3 would resolve this problem. The goood news is enabling S3 integration is fairly simple in Askbot.</p>
+<p>Please first install the following packages:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">boto</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">django</span><span class="o">-</span><span class="n">storages</span>
+</pre></div>
+</div>
+<p>Create a new Python calss, <code class="docutils literal"><span class="pre">s3utils.py</span></code> in the same directory as your <code class="docutils literal"><span class="pre">settings.py</span></code> file. And define the class as the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">storages.backends.s3boto</span> <span class="k">import</span> <span class="n">S3BotoStorage</span>
+<span class="n">MediaRootS3BotoStorage</span>  <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">S3BotoStorage</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="s1">&#39;media&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then replace the following line in your <code class="docutils literal"><span class="pre">settings.py</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;askbot&#39;</span><span class="p">,</span> <span class="s1">&#39;upfiles&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#set encoding to unicode for reading environment variables</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+
+<span class="c1">#AWS params used for S3 bucket integration.</span>
+<span class="c1">#They have to be set as an enviroment variable. Otherwise local storage will be used.</span>
+<span class="c1">#These options apply to a local deployment only</span>
+<span class="n">AWS_STORAGE_BUCKET_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;STORAGE_BUCKET_NAME&#39;</span><span class="p">)</span>
+<span class="n">AWS_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ACCESS_KEY_ID&#39;</span><span class="p">)</span>
+<span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SECRET_ACCESS_KEY&#39;</span><span class="p">)</span>
+
+<span class="c1"># S3 path to the directory that holds uploaded media</span>
+<span class="n">AWS_S3_CUSTOM_DOMAIN</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.s3.amazonaws.com&#39;</span> <span class="o">%</span> <span class="n">AWS_STORAGE_BUCKET_NAME</span>
+<span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="s2">&quot;https://</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">AWS_S3_CUSTOM_DOMAIN</span><span class="p">,</span> <span class="s1">&#39;media&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In addition, replace the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DEFAULT_FILE_STORAGE</span> <span class="o">=</span> <span class="s1">&#39;django.core.files.storage.FileSystemStorage&#39;</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DEFAULT_FILE_STORAGE</span> <span class="o">=</span> <span class="s1">&#39;s3utils.MediaRootS3BotoStorage&#39;</span>
+</pre></div>
+</div>
+<p>Last but not least, we would need to update the <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code> field to let Django know that the storage modules have been installed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>   <span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+     <span class="o">...</span><span class="p">,</span>
+     <span class="s1">&#39;storages&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Now the only thing left to do is to specify the AWS parameters from command line:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ export STORAGE_BUCKET_NAME=BUCKET_NAEM #set to the bucket name you&#39;ve created in AWS
+$ export ACCESS_KEY_ID=XXXXXXXXXXXXXXXX
+$ export SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXXXX
+</pre></div>
+</div>
+<p>Then deploy Askbot. You should now be using the S3 storage instead of local storage.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Optional modules</a><ul>
+<li><a class="reference internal" href="#haystack-search">Haystack search</a><ul>
+<li><a class="reference internal" href="#solr-and-multilingual-support">Solr and  Multilingual Support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ldap-authentication">LDAP authentication</a></li>
+<li><a class="reference internal" href="#custom-section-in-the-user-profile">Custom section in the user profile</a></li>
+<li><a class="reference internal" href="#wordpress-authentication">Wordpress authentication</a></li>
+<li><a class="reference internal" href="#celery-for-background-jobs">Celery for background jobs</a></li>
+<li><a class="reference internal" href="#s3-integration">S3 Integration</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sending-email-to-askbot.html"
+                        title="previous chapter">Sending email to askbot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">Askbot API</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

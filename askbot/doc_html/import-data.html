@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Import other forums into Askbot &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Moderation in Askbot" href="moderation.html" />
+    <link rel="prev" title="How to upgrade Askbot" href="upgrade.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="import-other-forums-into-askbot">
+<h1>Import other forums into Askbot<a class="headerlink" href="#import-other-forums-into-askbot" title="Permalink to this headline">¶</a></h1>
+<p>Askbot supports importing of data from StackExchange and Zendesk.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If your database contains any data prior to importing, please back it up before proceeding.</p>
+</div>
+<div class="section" id="stackexchange">
+<h2>StackExchange<a class="headerlink" href="#stackexchange" title="Permalink to this headline">¶</a></h2>
+<p>Add <cite>askbot.importers.stackexchange</cite> to the list of <cite>INSTALLED_APPS</cite> list in your <cite>settings.py</cite>, then run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">syncdb</span>
+</pre></div>
+</div>
+<p>Then there will be two ways to import your StackExchange dump:</p>
+<ul>
+<li><p class="first">via the web at url <cite>/import-data/</cite>, relative to your forum installation</p>
+</li>
+<li><p class="first">using a management command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">load_stackexchange</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">your</span><span class="o">-</span><span class="n">se</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="zendesk">
+<h2>Zendesk<a class="headerlink" href="#zendesk" title="Permalink to this headline">¶</a></h2>
+<p>Add <cite>askbot.importers.zendesk</cite> to the list of <cite>INSTALLED_APPS</cite> in the <cite>settings.py</cite>,
+run <cite>python manage.py syncdb</cite>.</p>
+<p>Prepare your zendesk files: put all your .xml files into one directory and tar-zip it:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">somedir</span>
+<span class="n">mv</span> <span class="o">*.</span><span class="n">xml</span> <span class="n">somedir</span> <span class="c1">#select the zendesk xml files and move them to the directory</span>
+<span class="n">tar</span> <span class="n">cvfz</span> <span class="n">zendesk</span><span class="o">.</span><span class="n">tgz</span> <span class="n">somedir</span> <span class="c1">#name of the tgz file is not important</span>
+</pre></div>
+</div>
+<p>Then run the import script:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">import_zendesk</span> <span class="n">zendesk</span><span class="o">.</span><span class="n">tgz</span> <span class="c1">#file name is the parameter</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is possible that import script will make some mistakes in determining
+which post in the group is the question, due to some specifics of zendesk
+data format. If so, please enable feature
+&#8220;Forum data rules&#8221;-&gt;&#8221;allow switching question with answer&#8221;
+in <a class="reference internal" href="live-settings.html#live-settings"><span class="std std-ref">live settings</span></a> and use it in an admin or a moderator
+account.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Import other forums into Askbot</a><ul>
+<li><a class="reference internal" href="#stackexchange">StackExchange</a></li>
+<li><a class="reference internal" href="#zendesk">Zendesk</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="upgrade.html"
+                        title="previous chapter">How to upgrade Askbot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="moderation.html"
+                        title="next chapter">Moderation in Askbot</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

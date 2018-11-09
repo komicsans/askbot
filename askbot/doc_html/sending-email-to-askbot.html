@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sending email to askbot &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Optional modules" href="optional-modules.html" />
+    <link rel="prev" title="Askbot management commands" href="management-commands.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sending-email-to-askbot">
+<h1>Sending email to askbot<a class="headerlink" href="#sending-email-to-askbot" title="Permalink to this headline">¶</a></h1>
+<p>Askbot supports posting replies by email as well as posting questions by email.</p>
+<p>If this feature is enabled, email alerts will be answerable via sending email
+to unique &#8220;reply-to&#8221; email addresses provided with the messages.</p>
+<p>To ask - send email to <cite>ask&#64;&lt;your domain name&gt;</cite>.</p>
+<p>For this feature  to work <code class="docutils literal"><span class="pre">Lamson</span></code> and <code class="docutils literal"><span class="pre">django-lamson</span></code> need to be installed on the system. To install all the necessery dependencies execute the following command:</p>
+<blockquote>
+<div>pip install django-lamson</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On Windows installation of the Lamson module may require
+additional work. Askbot does not support this feature
+on Windows automatically.</p>
+</div>
+<p>The lamson daemon needs a folder to store it&#8217;s mail queue files and a folder to store log files, create the folders folder named <code class="docutils literal"><span class="pre">run</span></code> and <code class="docutils literal"><span class="pre">logs</span></code> within your project folder by executing the following commands:</p>
+<blockquote>
+<div><p>mkdir run</p>
+<p>mkdir logs</p>
+</div></blockquote>
+<p>The minimum settings required to enable this feature are defining the port and binding address for the lamson SMTP daemon and the email handlers within askbot. Edit your settings.py file to include the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAMSON_RECEIVER_CONFIG</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;your.ip.address&#39;</span><span class="p">,</span> <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">}</span>
+<span class="n">LAMSON_HANDLERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;askbot.mail.lamson_handlers&#39;</span><span class="p">]</span>
+<span class="n">LAMSON_ROUTER_DEFAULTS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;.+&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>In the list of <code class="docutils literal"><span class="pre">installed_apps</span></code> add the app <code class="docutils literal"><span class="pre">django_lamson</span></code>.</p>
+<p>The <code class="docutils literal"><span class="pre">LAMSON_RECEIVER_CONFIG</span></code> parameter defines the binding address/port for the SMTP daemon. To recieve internet email you will need to bind to your external ip address and port 25. If you just want to test the feature by sending eamil from the same system you could bind to 127.0.0.1 and any higher port.</p>
+<p>To run the lamson SMTP daemon you will need to execute the following management command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">lamson_start</span>
+</pre></div>
+</div>
+<p>To stop the daemon issue the following command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">lamson_stop</span>
+</pre></div>
+</div>
+<p>Note that in order to be able to bind the daemon to port 25 you will need to execute the command as a superuser.</p>
+<p>Within the askbot admin interface there are 4 significant configuration points for this feature.</p>
+<ul class="simple">
+<li>In the email section, the &#8220;Enable posting answers and comments by email&#8221; controls whether the feature is enabled or disabled.</li>
+<li>The &#8220;reply by email hostname&#8221; needs to be set to the email hostname where you want to receive the email replies. If for example this is set to &#8220;example.com&#8221; the users will post replies to addresses such as &#8220;<a class="reference external" href="mailto:4wffsw345wsf&#37;&#52;&#48;example&#46;com">4wffsw345wsf<span>&#64;</span>example<span>&#46;</span>com</a>&#8221;, you need to point the MX DNS record for that domain to the address where you will run the lamson SMTP daemon.</li>
+<li>The last setting in this section controls the threshold for minimum length of the reply that is posted as an answer to a question. If the user is replying to a notification for a question and the reply  body is shorter than this threshold the reply will be posted as a comment to the question.</li>
+<li>In the karma thresholds section the &#8220;Post answers and comments by email&#8221; defines the minimum karma for users to be able to post replies by email.</li>
+</ul>
+<p>If the system where lamson is hosted also acts as an email server or you simply want some of the emails to be ignored and sent to another server you can define forward rules. Any emails matching these rules will be sent to another smtp server, bypassing the reply by email function. As an example by adding the following in your settings.py file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAMSON_FORWARD</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">{</span>
+       <span class="s1">&#39;pattern&#39;</span><span class="p">:</span> <span class="s1">&#39;(.*?)@(.subdomain1|subdomain2)\.example.com&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">8825</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+       <span class="s1">&#39;pattern&#39;</span><span class="p">:</span> <span class="s1">&#39;(info|support)@example.com&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">8825</span>
+    <span class="p">},</span>
+
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>any email that was sent to <a class="reference external" href="mailto:anyaddress&#37;&#52;&#48;sobdomain1&#46;example&#46;com">anyaddress<span>&#64;</span>sobdomain1<span>&#46;</span>example<span>&#46;</span>com</a> or <a class="reference external" href="mailto:anyaddress&#37;&#52;&#48;sobdomain2&#46;example&#46;com">anyaddress<span>&#64;</span>sobdomain2<span>&#46;</span>example<span>&#46;</span>com</a> or <a class="reference external" href="mailto:info&#37;&#52;&#48;example&#46;com">info<span>&#64;</span>example<span>&#46;</span>com</a> will be forwarded to the smtp server listening on port 8825. The pattern parameter is treated as a regular expression that is matched against  the <code class="docutils literal"><span class="pre">To</span></code> header of the email message and the <code class="docutils literal"><span class="pre">host</span></code> and <code class="docutils literal"><span class="pre">port</span></code> are the host and port of the smtp server that the message should be forwarded to.</p>
+<p>If you want to run the lamson daemon on a port other than 25 you can use a mail proxy server such as <code class="docutils literal"><span class="pre">nginx</span></code> that will listen on port 25 and forward any SMTP requests to lamson. Using nginx you can also setup more complex email handling rules, such as for example if the same server where askbot is installed acts as an email server for other domains you can configure nginx to forward any emails directed to your askbot installation to lamson and any other emails to the mail server you&#8217;re using, such as <code class="docutils literal"><span class="pre">postfix</span></code>. For more information on how to use nginx for this please consult the nginx mail module documentation <a class="reference external" href="http://wiki.nginx.org/MailCoreModule">nginx mail module documentation</a> .</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="management-commands.html"
+                        title="previous chapter">Askbot management commands</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="optional-modules.html"
+                        title="next chapter">Optional modules</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

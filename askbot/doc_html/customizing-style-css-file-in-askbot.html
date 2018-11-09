@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Customizing style.css file in Askbot &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="customizing-style-css-file-in-askbot">
+<span id="id1"></span><h1>Customizing style.css file in Askbot<a class="headerlink" href="#customizing-style-css-file-in-askbot" title="Permalink to this headline">¶</a></h1>
+<p>File <cite>style.css</cite> is produced by the <a class="reference external" href="http://lesscss.org">lesscss compiler</a> - <code class="docutils literal"><span class="pre">lessc</span></code>.</p>
+<p>Please find documentation about the lesscss format elsewhere.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Besides the &#8220;official&#8221; lesscss compiler, there are other
+tools that convert .less files into .css: for example a
+<a class="reference external" href="http://incident57.com/less/">less compiler from codekit (mac)</a>
+and a <a class="reference external" href="http://wearekiss.com/simpless">portable SimpLESS compiler</a>.</p>
+</div>
+<div class="section" id="compiling-lesscss-files">
+<h2>Compiling lesscss files<a class="headerlink" href="#compiling-lesscss-files" title="Permalink to this headline">¶</a></h2>
+<p>The following command will compile the lesscss source file,
+an option -x will produce compressed css file:</p>
+<blockquote>
+<div>lessc file.lesscss -x &gt; file.css</div></blockquote>
+</div>
+<div class="section" id="installing-lesscss">
+<h2>Installing lesscss<a class="headerlink" href="#installing-lesscss" title="Permalink to this headline">¶</a></h2>
+<p>Make sure you have recent version of <a class="reference external" href="http://nodejs.org">node.js</a> - latest version preferred.
+More recent versions of node come with the tool called <a class="reference external" href="http://npmjs.org">npm</a>,
+for earlier versions <code class="docutils literal"><span class="pre">npm</span></code> will need to be installed manually.</p>
+<p>To install lesscss, type:</p>
+<blockquote>
+<div>sudo npm install less</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Customizing style.css file in Askbot</a><ul>
+<li><a class="reference internal" href="#compiling-lesscss-files">Compiling lesscss files</a></li>
+<li><a class="reference internal" href="#installing-lesscss">Installing lesscss</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

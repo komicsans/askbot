@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuring full text search in Askbot &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" />
+    <link rel="next" title="Migrating data from MySQL to Postgresql" href="mysql-to-postgres.html" />
+    <link rel="prev" title="Configuring language support in Askbot" href="localization.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="configuring-full-text-search-in-askbot">
+<h1>Configuring full text search in Askbot<a class="headerlink" href="#configuring-full-text-search-in-askbot" title="Permalink to this headline">¶</a></h1>
+<p>Currently there are two supported language-aware mechanisms for full text search:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#postgresql-text-search"><span class="std std-ref">postgresql full text search</span></a></li>
+<li><a class="reference internal" href="#solr-text-search"><span class="std std-ref">Solr search engine</span></a></li>
+</ul>
+<p>MySQL supports text search only for English and only for the MyISAM storage engine.
+MyISAM engine lacks support of the database transactions,
+therefore it is strongly recommended to use Postgresql.</p>
+<div class="section" id="postgresql-full-text-search">
+<span id="postgresql-text-search"></span><h2>Postgresql full text search<a class="headerlink" href="#postgresql-full-text-search" title="Permalink to this headline">¶</a></h2>
+<p>Postgresql supports full text search in the following languages:</p>
+<p>Danish, Dutch, English, Finnish, French, German, Hungarian,
+Italian, Japanese (requires postgresql package <cite>textsearch_ja</cite>), Norwegian,
+Portugese, Romanian, Russian, Spanish, Swedish, Turkish.</p>
+<p>To enable this option - just use the postgresql database and
+add in the <cite>settings.py</cite> file
+the corresponding entry in the
+<a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/settings/#languages">LANGUAGES setting</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Japanese language search in Postgresql requires installation
+of a &#8220;contrib&#8221; package called <cite>textsearch_ja</cite></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For Chinese language search you will have to get a PostgreSQL
+extension from <a class="reference external" href="https://github.com/amutu/zhparser">https://github.com/amutu/zhparser</a> and create a
+search configuration called <cite>chinese</cite>.</p>
+</div>
+</div>
+<div class="section" id="solr-full-text-search">
+<span id="solr-text-search"></span><h2>Solr full text search<a class="headerlink" href="#solr-full-text-search" title="Permalink to this headline">¶</a></h2>
+<p>Apache Solr search supports more languages and Askbot supports Solr via the
+module called Haystack.</p>
+<p><a class="reference internal" href="solr.html#solr"><span class="std std-ref">Here</span></a> are detailed instructions on how to enable Solr on
+Ubuntu system version 12.04, which may be helpful for users of other
+distributions of Linux.</p>
+<p>In addition to the basic set up of Solr, it will be necessary to configure
+<a class="reference internal" href="solr.html#solr-multilingual"><span class="std std-ref">multilingual search</span></a> under solr.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configuring full text search in Askbot</a><ul>
+<li><a class="reference internal" href="#postgresql-full-text-search">Postgresql full text search</a></li>
+<li><a class="reference internal" href="#solr-full-text-search">Solr full text search</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="localization.html"
+                        title="previous chapter">Configuring language support in Askbot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mysql-to-postgres.html"
+                        title="next chapter">Migrating data from MySQL to Postgresql</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>

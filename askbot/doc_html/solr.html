@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing Apache Solr with Apache Tomcat 7 in Ubuntu 12.04 &#8212; Askbot 0.10.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/traditional.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Askbot 0.10.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+<div class="logo">
+  <a href="/doc/index.html"><h1>Askbot Project Documentation</h1></a>
+  <div class="topnav">
+    <a href="http://twitter.com/askbot7" alt="Follow us on twitter"><img src="_static/twitter.png"/></a>
+    <a href="https://www.facebook.com/pages/Askbot/128297183877495" alt="like us on Facebook"><img src="_static/facebook.png"/></a>
+  </div>
+</div>
+<div class="ab-proj-header">
+        <a href="/">Home</a> | 
+        <a href="/en/questions/" title="Ask Questions">Ask Questions</a> | 
+        <a href="https://askbot.com/hire-us/" alt='Hire Us'>Consulting Services</a> |
+        <a href="/doc/index.html" alt="Documentation">Documentation</a> | 
+        <a href="https://askbot.com/contribute" alt='Contribute'>Contribute</a> | 
+        <a href="https://askbot.com/feedback/" alt='contact'>Contact</a>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installing-apache-solr-with-apache-tomcat-7-in-ubuntu-12-04">
+<span id="solr"></span><h1>Installing Apache Solr with Apache Tomcat 7 in Ubuntu 12.04<a class="headerlink" href="#installing-apache-solr-with-apache-tomcat-7-in-ubuntu-12-04" title="Permalink to this headline">¶</a></h1>
+<p>This document describes the process of instalation of Apache Solr search engine in Ubuntu Server  12.04
+for askbot use. To follow this steps you must have already askbot installed and running.</p>
+<div class="section" id="installation-of-the-required-packages">
+<h2>Installation of the required packages<a class="headerlink" href="#installation-of-the-required-packages" title="Permalink to this headline">¶</a></h2>
+<p>Install packages <cite>tomcat7</cite> and <cite>tomcat7-admin</cite>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">tomcat7</span> <span class="n">tomcat7</span><span class="o">-</span><span class="n">admin</span>
+</pre></div>
+</div>
+<p>Download Apache Solr from the <a class="reference external" href="http://lucene.apache.org/solr/downloads.html">official site</a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">bizdirusa</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mirrors</span><span class="o">/</span><span class="n">apache</span><span class="o">/</span><span class="n">lucene</span><span class="o">/</span><span class="n">solr</span><span class="o">/</span><span class="mf">3.6</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span><span class="n">apache</span><span class="o">-</span><span class="n">solr</span><span class="o">-</span><span class="mf">3.6</span><span class="o">.</span><span class="mf">2.</span><span class="n">tgz</span>
+</pre></div>
+</div>
+<p>Install <cite>django-haystack</cite> module in your Python environment:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">django</span><span class="o">-</span><span class="n">haystack</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-up-tomcat">
+<h2>Setting up Tomcat<a class="headerlink" href="#setting-up-tomcat" title="Permalink to this headline">¶</a></h2>
+<p>After installing Tomcat, add users to the Tomcat server.
+Edit <cite>/etc/tomcat7/tomcat-users.xml</cite> and add the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;
+&lt;tomcat-users&gt;
+  &lt;role rolename=&quot;manager&quot;/&gt;
+  &lt;role rolename=&quot;admin&quot;/&gt;
+  &lt;role rolename=&quot;admin-gui&quot;/&gt;
+  &lt;role rolename=&quot;manager-gui&quot;/&gt;
+  &lt;user username=&quot;tomcat&quot; password=&quot;tomcat&quot;
+      roles=&quot;manager,admin,manager-gui,admin-gui&quot;/&gt;
+&lt;/tomcat-users&gt;
+</pre></div>
+</div>
+<p>Then restart the service:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">service</span> <span class="n">tomcat7</span> <span class="n">restart</span>
+</pre></div>
+</div>
+<p>Now you should be able to connect to the web management interface
+via <a class="reference external" href="http://youripaddress:8080/manager">http://youripaddress:8080/manager</a>
+and entering there user name and password.</p>
+</div>
+<div class="section" id="installing-solr-under-tomcat">
+<h2>Installing Solr under Tomcat<a class="headerlink" href="#installing-solr-under-tomcat" title="Permalink to this headline">¶</a></h2>
+<p>Extract the solr tar archive from the previous download:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xzf</span> <span class="n">apache</span><span class="o">-</span><span class="n">solr</span><span class="o">-</span><span class="mf">3.6</span><span class="o">.</span><span class="mf">2.</span><span class="n">tgz</span>
+</pre></div>
+</div>
+<p>Copy the <cite>example/</cite> directory from the source to <cite>/opt/solr/</cite>.
+Open the file <cite>/opt/solr/example/solr/conf/solrconfig.xml</cite>
+and Modify the dataDir parameter as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&lt;dataDir&gt;${solr.data.dir:/opt/solr/example/solr/data}&lt;/dataDir&gt;
+</pre></div>
+</div>
+<p>Copy the <cite>.war</cite> file in dist directory to <cite>/opt/solr</cite>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="n">dist</span><span class="o">/</span><span class="n">apache</span><span class="o">-</span><span class="n">solr</span><span class="o">-</span><span class="mf">3.6</span><span class="o">.</span><span class="mf">2.</span><span class="n">war</span>  <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">solr</span>
+</pre></div>
+</div>
+<p>Create <cite>solr.xml</cite> inside of <cite>/etc/tomcat/Catalina/localhost/</cite> with the following contents:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;Context docBase=&quot;/opt/solr/apache-solr-3.6.2.war&quot; debug=&quot;0&quot; crossContext=&quot;true&quot;&gt;
+  &lt;Environment name=&quot;solr/home&quot; type=&quot;java.lang.String&quot;
+     value=&quot;/opt/solr/example/solr&quot; override=&quot;true&quot;/&gt;
+&lt;/Context&gt;
+</pre></div>
+</div>
+<p>Restart the tomcat server:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">service</span> <span class="n">tomcat7</span> <span class="n">restart</span>
+</pre></div>
+</div>
+<p>Now you should be able to access the &#8220;solr&#8221; application
+in the Tomcat manager at <cite>/solr/admin</cite>.</p>
+</div>
+<div class="section" id="configuring-askbot-with-solr">
+<h2>Configuring Askbot with Solr<a class="headerlink" href="#configuring-askbot-with-solr" title="Permalink to this headline">¶</a></h2>
+<p>Open settings.py file and configure the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ENABLE_HAYSTACK_SEARCH</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">HAYSTACK_CONNECTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;haystack.backends.solr_backend.SolrEngine&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;URL&#39;</span><span class="p">:</span> <span class="s1">&#39;http://127.0.0.1:8080/solr&#39;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>After that create the solr schema and store the output to your solr instalation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">build_solr_schema</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">solr</span><span class="o">/</span><span class="n">example</span><span class="o">/</span><span class="n">solr</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">schema</span><span class="o">.</span><span class="n">xml</span>
+</pre></div>
+</div>
+<p>Restart tomcat server:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">service</span> <span class="n">tomcat7</span> <span class="n">restart</span>
+</pre></div>
+</div>
+<p>Build the Index for the first time:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">rebuild_index</span>
+</pre></div>
+</div>
+<p>The output should be something like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">All</span> <span class="n">documents</span> <span class="n">removed</span><span class="o">.</span>
+<span class="n">Indexing</span> <span class="mi">43</span> <span class="n">people</span><span class="o">.</span>
+<span class="n">Indexing</span> <span class="mi">101</span> <span class="n">posts</span><span class="o">.</span>
+<span class="n">Indexing</span> <span class="mi">101</span> <span class="n">threads</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Now all should be ready,
+just restart the askbot application
+and test the search with haystack and solr.</p>
+</div>
+<div class="section" id="multilingual-setup">
+<span id="solr-multilingual"></span><h2>Multilingual Setup<a class="headerlink" href="#multilingual-setup" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is experimental feature, currently xml generation works for:
+English, Spanish, Chinese, Japanese, Korean and French.</p>
+</div>
+<p>Add the following to settings.py:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">HAYSTACK_ROUTERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;askbot.search.haystack.routers.LanguageRouter&#39;</span><span class="p">,]</span>
+</pre></div>
+</div>
+<p>Configure the HAYSTACK_CONNECTIONS settings with the following format for each language:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">HAYSTACK_CONNECTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;haystack.backends.solr_backend.SolrEngine&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;URL&#39;</span><span class="p">:</span> <span class="s1">&#39;http://127.0.0.1:8080/solr&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;default_&lt;language_code&gt;&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;haystack.backends.solr_backend.SolrEngine&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;URL&#39;</span><span class="p">:</span> <span class="s1">&#39;http://127.0.0.1:8080/solr/core-&lt;language_code&gt;&#39;</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Generate xml files according to language:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">askbot_build_solr_schema</span> <span class="o">-</span><span class="n">l</span> <span class="o">&lt;</span><span class="n">language_code</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">solr</span><span class="o">/</span><span class="n">example</span><span class="o">/</span><span class="n">solr</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">schema</span><span class="o">-&lt;</span><span class="n">language_code</span><span class="o">&gt;.</span><span class="n">xml</span>
+</pre></div>
+</div>
+<div class="section" id="add-cores-to-solr">
+<h3>Add cores to Solr<a class="headerlink" href="#add-cores-to-solr" title="Permalink to this headline">¶</a></h3>
+<p>For each language that you want to support you will need to add a solr core like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>http://127.0.0.1:8080/solr/admin/cores?action=CREATE&amp;name=core-&lt;language_code&gt;&amp;instanceDir=.&amp;config=solrconfig.xml&amp;schema=schema-&lt;language_code&gt;.xml&amp;dataDir=data
+</pre></div>
+</div>
+<p>For more information on how to handle Solr cores visit the
+<a class="reference external" href="http://wiki.apache.org/solr/CoreAdmin">Solr documetation</a>.</p>
+</div>
+<div class="section" id="build-the-index-according-to-language">
+<h3>Build the index according to language<a class="headerlink" href="#build-the-index-according-to-language" title="Permalink to this headline">¶</a></h3>
+<p>For every active language rebuild the index:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">rebuild_index</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="keeping-the-search-index-fresh">
+<h2>Keeping the search index fresh<a class="headerlink" href="#keeping-the-search-index-fresh" title="Permalink to this headline">¶</a></h2>
+<p>There are several ways to keep the index fresh in askbot with haystack.</p>
+<div class="section" id="cronjob">
+<h3>Cronjob<a class="headerlink" href="#cronjob" title="Permalink to this headline">¶</a></h3>
+<p>Create a cronjob that executes <em>update_index</em> command.</p>
+</div>
+<div class="section" id="real-time-signal">
+<h3>Real Time Signal<a class="headerlink" href="#real-time-signal" title="Permalink to this headline">¶</a></h3>
+<p>The <em>real time</em> signal method updates the index synchronously
+after each object it&#8217;s  saved or deleted,
+to enable it add this to settings.py:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">HAYSTACK_SIGNAL_PROCESSOR</span> <span class="o">=</span> <span class="s1">&#39;askbot.search.haystack.signals.AskbotRealtimeSignalProcessor&#39;</span>
+</pre></div>
+</div>
+<p>Use of synchronous index updates may slow down your site
+which may not be acceptable for the high traffic sites.</p>
+</div>
+<div class="section" id="updating-the-index-asyncronously-with-celery">
+<h3>Updating the Index asyncronously with Celery<a class="headerlink" href="#updating-the-index-asyncronously-with-celery" title="Permalink to this headline">¶</a></h3>
+<p>The <em>asynchronous signal</em> method updates the index by adding delayed job to the queue
+after each object is saved or deleted.</p>
+<p>To make this work,
+<a class="reference external" href="http://celery.readthedocs.org/en/latest/django/first-steps-with-django.html">django-celery</a>
+must be installed, enabled and configured and the Haystack signal processor configured
+in the <cite>settings.py</cite> file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">HAYSTACK_SIGNAL_PROCESSOR</span> <span class="o">=</span> <span class="s1">&#39;askbot.search.haystack.signals.AskbotCelerySignalProcessor&#39;</span>
+<span class="c1">#modify CELERY_ALWAYS_EAGER to:</span>
+<span class="n">CELERY_ALWAYS_EAGER</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing Apache Solr with Apache Tomcat 7 in Ubuntu 12.04</a><ul>
+<li><a class="reference internal" href="#installation-of-the-required-packages">Installation of the required packages</a></li>
+<li><a class="reference internal" href="#setting-up-tomcat">Setting up Tomcat</a></li>
+<li><a class="reference internal" href="#installing-solr-under-tomcat">Installing Solr under Tomcat</a></li>
+<li><a class="reference internal" href="#configuring-askbot-with-solr">Configuring Askbot with Solr</a></li>
+<li><a class="reference internal" href="#multilingual-setup">Multilingual Setup</a><ul>
+<li><a class="reference internal" href="#add-cores-to-solr">Add cores to Solr</a></li>
+<li><a class="reference internal" href="#build-the-index-according-to-language">Build the index according to language</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#keeping-the-search-index-fresh">Keeping the search index fresh</a><ul>
+<li><a class="reference internal" href="#cronjob">Cronjob</a></li>
+<li><a class="reference internal" href="#real-time-signal">Real Time Signal</a></li>
+<li><a class="reference internal" href="#updating-the-index-asyncronously-with-celery">Updating the Index asyncronously with Celery</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Askbot Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>
