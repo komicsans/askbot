@@ -103,6 +103,8 @@ function start(){
 
     if [ ! -f "${PROJECT_DIR}/manage.py" ]; then
         initialize;
+    else
+        sleep 15;
     fi
 #   run;
 }

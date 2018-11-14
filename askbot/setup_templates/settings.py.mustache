@@ -165,7 +165,7 @@ CACHES = {
         'TIMEOUT': 6000,
         # Chose a unique KEY_PREFIX to avoid clashes with other applications
         # using the same cache (e.g. a shared memcache instance).
-        #'KEY_PREFIX': 'askbot',
+        'KEY_PREFIX': 'askbot',
         'BACKEND' : 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION' : 'unix:/tmp/memcached.sock',
     }
@@ -176,7 +176,7 @@ LIVESETTINGS_CACHE_TIMEOUT = CACHES['default']['TIMEOUT']
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 CACHE_MIDDLEWARE_SECONDS = 600
 #If you use memcache you may want to uncomment the following line to enable memcached based sessions
-#SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
