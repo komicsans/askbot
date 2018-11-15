@@ -11,6 +11,19 @@ services:
             MYSQL_PASSWORD: askbot
         tty: false
         stdin_open: false
+    proxy:
+        image: nginx
+        container_name: proxy
+        restart: always
+        volumes:
+            - ./conf/proxy.conf:/etc/nginx/nginx.conf:ro
+            - ./conf/cert.crt:/etc/nginx/cert.crt:ro
+            - ./conf/cert.key:/etc/nginx/cert.key:ro
+        depends_on:
+            - "qa"
+        ports:
+            - "80:80"
+            - "443:443"
     qa:
         build:
             context: .
@@ -20,5 +33,5 @@ services:
         container_name: askbot
         depends_on:
             - "db"
-        ports:
-            - "81:80"
+#        ports:
+#            - "81:80"
