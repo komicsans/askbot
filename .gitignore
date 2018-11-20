@@ -22,7 +22,7 @@ settings.py
 .coverage
 *.iml
 lint
-env
+#env
 .vagrant
 /Vagrantfile
 /custom_settings
